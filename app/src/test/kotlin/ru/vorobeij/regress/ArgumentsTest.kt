@@ -1,4 +1,4 @@
-package ru.vorobeij
+package ru.vorobeij.regress
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

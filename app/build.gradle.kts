@@ -6,6 +6,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(KotlinX.cli)
     testImplementation(Testing.junit.jupiter)
+    testImplementation(Testing.junit.jupiter.api)
 }
 
 // https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/wiki/Customizing-plugin-behavior
