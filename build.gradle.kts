@@ -54,6 +54,7 @@ tasks.register<GradleBuild>("runChecks") {
         "clean",
         "buildHealth",
         "diktatFix",
+        "jacocoTestCoverageVerification",
         "build"
     )
     outputs

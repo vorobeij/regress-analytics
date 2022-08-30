@@ -3,6 +3,7 @@ package ru.vorobeij.regress.git
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import ru.vorobeij.regress.git.data.GitShowInfo
 
 private const val DATE_FORMAT_STRING = "EEE MMM dd HH:mm:ss yyyy"
 
@@ -32,19 +33,4 @@ class GitOutputParser {
      * @return true if has uncommitted changes
      */
     fun hasUncommittedChanges(gitStatusOutput: String): Boolean = gitStatusOutput.contains("nothing to commit, working tree clean").not()
-
-    /**
-     * @property commit
-     * @property authorName
-     * @property authorEmail
-     * @property date
-     * @property message
-     */
-    data class GitShowInfo(
-        val commit: String,
-        val authorName: String,
-        val authorEmail: String,
-        val date: Calendar,
-        val message: String
-    )
 }

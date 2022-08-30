@@ -10,6 +10,19 @@ internal class ArgumentsTest {
     private val argsFullString = "--projectRootPath $projectRootPath"
 
     @Test
+    fun `init variables`() {
+        val args = Arguments("root")
+        Assertions.assertEquals(
+            args.benchmarkJsonRoot,
+            "root/benchmarks/json"
+        )
+        Assertions.assertEquals(
+            args.benchmarkReportsRoot,
+            "root/benchmarks/reports"
+        )
+    }
+
+    @Test
     fun `parse arguments`() {
         val arguments = Arguments.fromArgs(argsString.split(" ").toTypedArray())
         Assertions.assertEquals(

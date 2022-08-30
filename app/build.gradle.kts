@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(project(":core"))
     implementation(KotlinX.cli)
     testImplementation(Testing.junit.jupiter)
     testImplementation(Testing.junit.jupiter.api)
@@ -16,8 +17,11 @@ dependencyAnalysis {
         onAny {
             severity("fail")
             exclude(
+                ":core",
                 "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
             )
         }
     }
 }
+
+apply(from = "$rootDir/jacoco.gradle")

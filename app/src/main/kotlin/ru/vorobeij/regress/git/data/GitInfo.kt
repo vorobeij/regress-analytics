@@ -1,8 +1,10 @@
-package ru.vorobeij.regress.git
+package ru.vorobeij.regress.git.data
 
 import java.io.File
 import java.util.Calendar
+import ru.vorobeij.jacoco.ExcludeGenerated
 import ru.vorobeij.regress.cmd.execute
+import ru.vorobeij.regress.git.GitOutputParser
 
 /**
  * @property commit
@@ -12,6 +14,7 @@ import ru.vorobeij.regress.cmd.execute
  * @property branch
  * @property isCommitted
  */
+@ExcludeGenerated
 data class GitInfo(
     val commit: String,
     val author: GitAuthor,
@@ -21,6 +24,7 @@ data class GitInfo(
     val isCommitted: Boolean
 ) {
 
+    @ExcludeGenerated
     companion object {
 
         fun from(folder: String): GitInfo {

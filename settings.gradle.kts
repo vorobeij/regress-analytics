@@ -11,5 +11,6 @@ refreshVersions {
 
 rootProject.name = "regress-analytics"
 include(
-    "app"
+    "app",
+    "core"
 )

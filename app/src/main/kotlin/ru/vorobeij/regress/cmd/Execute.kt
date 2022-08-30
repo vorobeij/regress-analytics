@@ -1,9 +1,10 @@
 package ru.vorobeij.regress.cmd
 
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.TimeUnit
+import ru.vorobeij.jacoco.ExcludeGenerated
 
+@ExcludeGenerated
 fun String.execute(workingDir: File): String? = try {
     val parts = this.split("\\s".toRegex())
     val proc = ProcessBuilder(*parts.toTypedArray())
@@ -14,7 +15,7 @@ fun String.execute(workingDir: File): String? = try {
 
     proc.waitFor(60, TimeUnit.MINUTES)
     proc.inputStream.bufferedReader().readText()
-} catch (e: IOException) {
+} catch (e: Exception) {
     e.printStackTrace()
     null
 }

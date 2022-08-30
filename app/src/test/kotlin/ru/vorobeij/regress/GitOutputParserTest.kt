@@ -3,6 +3,7 @@ package ru.vorobeij.regress
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.vorobeij.regress.git.GitOutputParser
+import ru.vorobeij.regress.git.data.GitShowInfo
 
 internal class GitOutputParserTest {
 
@@ -17,7 +18,7 @@ Date:   Mon Aug 29 11:36:33 2022 +0300
         """.trimIndent()
 
         Assertions.assertEquals(
-            GitOutputParser.GitShowInfo(
+            GitShowInfo(
                 commit = "e9b0a9a92c42ddd2ce8ceca302f43e53a547b34d",
                 authorName = "Evgenii",
                 authorEmail = "vorobeievgeniy@gmail.com",
