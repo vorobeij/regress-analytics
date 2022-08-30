@@ -35,6 +35,10 @@ allprojects {
         implementation(Kotlin.stdlib.jdk8)
     }
 
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+
     apply(plugin = "org.cqfn.diktat.diktat-gradle-plugin")
     configure<org.cqfn.diktat.plugin.gradle.DiktatExtension> {
         diktatConfigFile = rootProject.file("diktat-analysis.yml")
@@ -49,6 +53,7 @@ tasks.register<GradleBuild>("runChecks") {
     tasks = listOf(
         "clean",
         "buildHealth",
+        "diktatFix",
         "build"
     )
     outputs
