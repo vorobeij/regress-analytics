@@ -45,7 +45,7 @@ class BenchmarksFileStorage(
         .filter { it.isNotBlank() }
         .map { json.decodeFromString<HistoricalBenchmark>(it) }
         .distinctBy { it.commit }
-        .filter { it.deviceFingerprint == deviceFingerprint }
+        .filter { it.deviceFingerprint == deviceFingerprint && it.name == benchmarkName }
 
     private fun convert(
         deviceFingerprint: String,
