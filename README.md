@@ -25,7 +25,7 @@ What if new code impacts in a slight way, so you can't notice that?
 
 1. Before merging branch launch benchmarks
 2. Add that data to database
-3. Analyse historical data and make desision about performance regress
+3. Analyse historical data and make decision about performance regress
 
 ## Script inputs (table item fields)
 
@@ -63,3 +63,27 @@ For each benchmark:
 ## About the project
 
 - [Features](./wiki/features.md)
+
+## Installation
+
+1. Install database [h2](https://www.h2database.com/html/download.html)
+   , [video](https://www.youtube.com/watch?v=6wUQagjtJ4c)
+
+## Android Studio flow
+
+Run benchmarks:
+
+```shell
+bundle exec fastlane android benchmarks
+```
+
+which
+
+1. runs microbenchmarks and pull data from device
+2. runs macrobenchmarks and pull data from device
+3. launches regress analytics script
+   1. save new entries and send them to storage (remote or local database)
+   2. delete saved files
+   3. if new benchmarks regress performance, throw exception
+
+// todo use suspend functions https://github.com/JetBrains/Exposed/wiki/Transactions#working-with-coroutines

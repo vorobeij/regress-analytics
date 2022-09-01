@@ -7,9 +7,13 @@ import kotlinx.cli.required
 
 /**
  * @property projectRootPath: root of android project with benchmarks
+ * @property threshold
+ * @property storageFilePath
  */
 data class Arguments(
-    val projectRootPath: String
+    val projectRootPath: String,
+    val threshold: Int,
+    val storageFilePath: String?
 ) {
 
     val benchmarkJsonRoot = "$projectRootPath/benchmarks/json"
@@ -24,9 +28,15 @@ data class Arguments(
         fun fromArgs(args: Array<String>): Arguments {
             val parser = ArgParser("regress-analytics")
             val projectRootPath by parser.option(ArgType.String, shortName = "root", description = "Project root path").required()
+            val threshold by parser.option(ArgType.Int, shortName = "t", description = "Benchmark threshold, percent [0;100]").required()
+            val storageFilePath by parser.option(ArgType.String, shortName = "storageFilePath", description = "Storage file path")
             parser.parse(args)
 
-            return Arguments(projectRootPath)
+            return Arguments(
+                projectRootPath = projectRootPath,
+                threshold = threshold,
+                storageFilePath = storageFilePath
+            )
         }
     }
 }

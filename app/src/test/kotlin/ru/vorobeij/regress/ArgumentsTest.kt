@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test
 internal class ArgumentsTest {
 
     private val projectRootPath = "~/Downloads/my-test-project"
-    private val argsString = "-root $projectRootPath"
-    private val argsFullString = "--projectRootPath $projectRootPath"
+    private val threshold = 5
+    private val storageFilePath = "~/Benchmark-regress.json"
+    private val argsString = "-root $projectRootPath -t $threshold -storageFilePath $storageFilePath"
+    private val argsFullString = """--projectRootPath $projectRootPath --threshold $threshold --storageFilePath $storageFilePath"""
 
     @Test
     fun `init variables`() {
-        val args = Arguments("root")
+        val args = Arguments("root", threshold, storageFilePath)
         Assertions.assertEquals(
             args.benchmarkJsonRoot,
             "root/benchmarks/json"
@@ -25,18 +27,18 @@ internal class ArgumentsTest {
     @Test
     fun `parse arguments`() {
         val arguments = Arguments.fromArgs(argsString.split(" ").toTypedArray())
-        Assertions.assertEquals(
-            /* expected = */ projectRootPath,
-            /* actual = */ arguments.projectRootPath
-        )
+        assertArguments(arguments)
     }
 
     @Test
     fun `parse full text arguments`() {
         val arguments = Arguments.fromArgs(argsFullString.split(" ").toTypedArray())
-        Assertions.assertEquals(
-            /* expected = */ projectRootPath,
-            /* actual = */ arguments.projectRootPath
-        )
+        assertArguments(arguments)
+    }
+
+    private fun assertArguments(arguments: Arguments) {
+        Assertions.assertEquals(projectRootPath, arguments.projectRootPath)
+        Assertions.assertEquals(storageFilePath, arguments.storageFilePath)
+        Assertions.assertEquals(threshold, arguments.threshold)
     }
 }

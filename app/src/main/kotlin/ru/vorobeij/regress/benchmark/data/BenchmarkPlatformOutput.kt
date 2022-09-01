@@ -3,12 +3,22 @@ package ru.vorobeij.regress.benchmark.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * @property benchmarks
+ * @property benchmarkContext
+ */
 @Serializable
-data class BenchmarkData(
+data class BenchmarkPlatformOutput(
     @SerialName("benchmarks") val benchmarks: List<Benchmark>,
     @SerialName("context") val benchmarkContext: BenchmarkContext
 )
 
+/**
+ * @property maximum
+ * @property median
+ * @property minimum
+ * @property runs
+ */
 @Serializable
 data class Measurements(
     @SerialName("maximum") val maximum: Double,
@@ -17,33 +27,47 @@ data class Measurements(
     @SerialName("runs") val runs: List<Double>
 )
 
+/**
+ * @property className
+ * @property metrics
+ * @property name
+ * @property repeatIterations
+ * @property thermalThrottleSleepSeconds
+ * @property totalRunTimeNs
+ * @property warmupIterations
+ */
 @Serializable
 data class Benchmark(
     @SerialName("className") val className: String,
     @SerialName("metrics") val metrics: Metrics,
     @SerialName("name") val name: String,
-    @SerialName("params") val params: Params?,
     @SerialName("repeatIterations") val repeatIterations: Int,
-    @SerialName("sampledMetrics") val sampledMetrics: SampledMetrics?,
     @SerialName("thermalThrottleSleepSeconds") val thermalThrottleSleepSeconds: Int,
     @SerialName("totalRunTimeNs") val totalRunTimeNs: Long,
     @SerialName("warmupIterations") val warmupIterations: Int
 ) {
 
+    /**
+     * @property summary
+     * @property allocationCount macrobenchmark only
+     * @property timeNs microbenchmarks only
+     */
     @Serializable
     data class Metrics(
-        @SerialName("timeToInitialDisplayMs") val summary: Measurements? = null,    // macrobenchmark only
-        @SerialName("allocationCount") val allocationCount: Measurements? = null,   // microbenchmarks only
-        @SerialName("timeNs") val timeNs: Measurements? = null                      // microbenchmarks only
+        @SerialName("timeToInitialDisplayMs") val summary: Measurements? = null,
+        @SerialName("allocationCount") val allocationCount: Measurements? = null,
+        @SerialName("timeNs") val timeNs: Measurements? = null  // microbenchmarks only
     )
-
-    @Serializable
-    object Params
-
-    @Serializable
-    object SampledMetrics
 }
 
+/**
+ * @property build
+ * @property cpuCoreCount
+ * @property cpuLocked
+ * @property cpuMaxFreqHz
+ * @property memTotalBytes
+ * @property sustainedPerformanceModeEnabled
+ */
 @Serializable
 data class BenchmarkContext(
     @SerialName("build") val build: Build,
@@ -54,6 +78,13 @@ data class BenchmarkContext(
     @SerialName("sustainedPerformanceModeEnabled") val sustainedPerformanceModeEnabled: Boolean
 ) {
 
+    /**
+     * @property brand
+     * @property device
+     * @property fingerprint
+     * @property model
+     * @property version
+     */
     @Serializable
     data class Build(
         @SerialName("brand") val brand: String,
@@ -63,6 +94,9 @@ data class BenchmarkContext(
         @SerialName("version") val version: Version
     ) {
 
+        /**
+         * @property sdk
+         */
         @Serializable
         data class Version(
             @SerialName("sdk") val sdk: Int
