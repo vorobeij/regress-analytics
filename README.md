@@ -1,89 +1,176 @@
 # Benchmarks analytics for android projects
 
+[Android project example](https://github.com/vorobeij/android-app-template)
+
 # The problem
 
-We do not have tools to inspect historical app's performance.
-At some point you start to see your application became slow.
-But at what point?
-What were those changes impacting performance so much that you start notice?
-What if new code impacts in a slight way, so you can't notice that?
+We do not have tools to inspect historical app’s performance. At some point you start to see your application became
+slow. But at what point? What were those changes impacting performance so much that you start notice? What if new code
+impacts in a slight way, so you can’t notice that?
 
-# Solution
+# What this script does
 
-1. Run performance benchmark locally
-2. Save all benchmark data to local storage
-3. Analyse new data and create report on how much your changes affect performance.
+[Android benchmarks library](https://developer.android.com/topic/performance/benchmarking/benchmarking-overview)
 
-> This solution may be deployed on a server for `develop` branch.
-> Each commit into develop could be measured from performance point of view.
+Analyses new benchmarks data and create report on how much your changes affect performance. Throws an exception if new
+benchmark is slower than median of previous ones.
 
-# Caveats
+May be deployed on CI for `develop` branch. Each commit into `develop` could be measured from performance point of view.
 
-1. Benchmarks are sensitive to environment. Run all your benchmarks on one machine/emulator to see meaningful insights.
+# Workflow
 
-## Flow
+## Before launching this script
 
-1. Before merging branch launch benchmarks
-2. Add that data to database
-3. Analyse historical data and make decision about performance regress
+1. Commit all of your code. Otherwise it won’t be saved
+2. Run all your benchmarks
+3. Pull benchmarks data from the device
 
-## Script inputs (table item fields)
+**Microbenchmarks**
 
-1. git author
-2. git commit date
-3. git message
-4. git branch
-5. are changes committed?
-6. benchmark data
+```bash
+#!/bin/sh
 
-<aside>
-💡 Pass **project folder path** and **benchmark json path**
-</aside>
+# Input arguments
+mkdir -p ../benchmarks/json
+BENCHMARK_RESULTS_OUTPUT=$(readlink -f ../benchmarks/json)
+PACKAGE_NAME=ru.vorobeij.android.app.benchmark.test
 
-## Create report with charts
+# Private constants
+BENCHMARK_RESULT_OUTPUT_DEVICE=/sdcard/Download
+BENCHMARK_RUNNER=androidx.benchmark.junit4.AndroidBenchmarkRunner
+ROOT=..
+OUTPUT_JSON_NAME=$PACKAGE_NAME-test-benchmarkData.json
 
-For each benchmark:
+cd $ROOT
+# Info: https://developer.android.com/topic/performance/benchmarking/benchmarking-in-ci
+./gradlew assembleAndroidTest
+#adb install ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+adb install ./microbenchmark/build/outputs/apk/androidTest/release/microbenchmark-release-androidTest.apk
+# List installed instrumentation
+adb shell pm list instrumentation
+# Launch instrumentation benchmark
+adb shell am instrument -w -e additionalTestOutputDir $BENCHMARK_RESULT_OUTPUT_DEVICE \
+                        $PACKAGE_NAME/$BENCHMARK_RUNNER \
+                        -e no-isolated-storage true
+# Pull benchmark results
+adb pull $BENCHMARK_RESULT_OUTPUT_DEVICE/$PACKAGE_NAME-benchmarkData.json \
+         $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME
+cat $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME | wc -l
 
-1. Sort all entries **time ascending**
-2. Map each entry N as x coordinate
-3. y = time, ms
+# Check for emulators connected:
+jsonLines=$(cat $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME | wc -l)
+if [ $jsonLines -lt 1 ]; then
+  echo "\n\u001b[31mERROR: benchmark failed\u001b[0m"
+  exit 1
+fi
+```
 
-### Chart tooltip
+**Macrobenchmarks**
 
-1. Author
-2. Date
-3. Branch
-4. Commit message
+```bash
+#!/bin/sh
 
-## Alerts
+# Input arguments
+mkdir -p ../benchmarks/json
+BENCHMARK_RESULTS_OUTPUT=$(readlink -f ../benchmarks/json)
+PACKAGE_NAME=ru.vorobeij.macrobenchmark
 
-1. Calculate median value and confidence interval
-2. If new min value > median + confidence interval → alert
+# Private constants
+BENCHMARK_RESULT_OUTPUT_DEVICE=/sdcard/Download
+BENCHMARK_RUNNER=androidx.test.runner.AndroidJUnitRunner
+ROOT=..
 
-## About the project
+cd $ROOT
+# Info: https://developer.android.com/topic/performance/benchmarking/benchmarking-in-ci
+./gradlew assembleBenchmark
+#adb install ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+adb install ./app/build/outputs/apk/benchmark/app-benchmark.apk
+# List installed instrumentation
+adb shell pm list instrumentation
+# Launch instrumentation benchmark
+adb shell am instrument -w -e additionalTestOutputDir $BENCHMARK_RESULT_OUTPUT_DEVICE \
+                        $PACKAGE_NAME/$BENCHMARK_RUNNER \
+                        -e no-isolated-storage true
+# Pull benchmark results
+OUTPUT_JSON_NAME=$PACKAGE_NAME-benchmarkData.json
+adb pull $BENCHMARK_RESULT_OUTPUT_DEVICE/$OUTPUT_JSON_NAME \
+         $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME
 
-- [Features](./wiki/features.md)
+cat $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME | wc -l
 
-## Installation
+# Check for emulators connected:
+jsonLines=$(cat $BENCHMARK_RESULTS_OUTPUT/$OUTPUT_JSON_NAME | wc -l)
+if [ $jsonLines -lt 1 ]; then
+  echo "\n\u001b[31mERROR: macro benchmark failed\u001b[0m"
+  exit 1
+fi
+```
 
-1. Install database [h2](https://www.h2database.com/html/download.html)
-   , [video](https://www.youtube.com/watch?v=6wUQagjtJ4c)
+## Launching the script
+
+1. Clone repo and run `./gradlew publishToMavenLocal`
+2. Copy `regress.jar` to your project
+
+   **analyse_benchmarks.sh**
+
+    ```bash
+    #!/usr/bin/env bash
+    
+    STORAGE_FILE=../benchmarks/reports/benchmarks.json
+    java -jar regress.jar --projectRootPath $(readlink -f ../) \
+                          --threshold 10 \
+                          --storageFilePath $(readlink -f $STORAGE_FILE)
+    ```
+
+3. Commit all your current progress
+4. Launch **analyse_benchmarks.sh**
+5. If your new code makes benchmarks slower, you’ll know it now
 
 ## Android Studio flow
 
-Run benchmarks:
+**analyse_benchmarks.sh**
 
-```shell
-bundle exec fastlane android benchmarks
+```bash
+#!/usr/bin/env bash
+
+STORAGE_FILE=../benchmarks/reports/benchmarks.json
+java -jar regress.jar --projectRootPath $(readlink -f ../) \
+                      --threshold 10 \
+                      --storageFilePath $(readlink -f $STORAGE_FILE)
 ```
 
-which
+Run benchmarks with `bundle exec fastlane android benchmarks`:
 
-1. runs microbenchmarks and pull data from device
-2. runs macrobenchmarks and pull data from device
-3. launches regress analytics script
+```ruby
+desc "Benchmarks"
+  lane :benchmarks do
+    sh "sh ../ci/microbenchmarks.sh"
+    sh "sh ../ci/macrobenchmarks.sh"
+    sh "sh ../ci/analyse_benchmarks.sh"
+  end
+```
+
+1. run microbenchmarks and pull data from device
+2. run macrobenchmarks and pull data from device
+3. launche regress analytics script
    1. save new entries and send them to storage (remote or local database)
    2. delete saved files
-   3. if new benchmarks regress performance, throw exception
+   3. if new benchmarks have performance impact, throw an exception (fail the build)
 
-// todo use suspend functions https://github.com/JetBrains/Exposed/wiki/Transactions#working-with-coroutines
+### Local usage
+
+1. Run `bundle exec fastlane android benchmarks` after each commit
+
+Only after 10 entries you can see errors in console.
+
+# Roadmap
+
+1. TODO
+   implement [BenchmarkRepository](https://github.com/vorobeij/regress-analytics/blob/main/app/src/main/kotlin/ru/vorobeij/regress/benchmark/reposotory/BenchmarksRepository.kt)
+   for your benchmark backend
+2. TODO create backend for benchmarks data
+3. Run on each commit. This task fails if performance impacted
+
+## Project structure
+
+- [Features](./wiki/features.md)
