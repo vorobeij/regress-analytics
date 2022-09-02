@@ -145,9 +145,9 @@ desc "Benchmarks"
 1. run microbenchmarks and pull data from device
 2. run macrobenchmarks and pull data from device
 3. launche regress analytics script
-   1. save new entries and send them to storage (remote or local database)
-   2. delete saved files
-   3. if new benchmarks have performance impact, throw an exception (fail the build)
+    1. save new entries and send them to storage (remote or local database)
+    2. delete saved files
+    3. if new benchmarks have performance impact, throw an exception (fail the build)
 
 ### Local usage
 
@@ -157,11 +157,8 @@ Only after 10 entries you can see errors in console.
 
 # Roadmap
 
-1.
-
-Implement [BenchmarkRepository](https://github.com/vorobeij/regress-analytics/blob/main/app/src/main/kotlin/ru/vorobeij/regress/benchmark/reposotory/BenchmarksRepository.kt)
+1. Implement [BenchmarkRepository](https://github.com/vorobeij/regress-analytics/blob/main/app/src/main/kotlin/ru/vorobeij/regress/benchmark/reposotory/BenchmarksRepository.kt)
 for your benchmark backend
-
 2. Create backend for benchmarks data
 
 ## Project structure
