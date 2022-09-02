@@ -12,8 +12,11 @@ impacts in a slight way, so you can’t notice that?
 
 [Android benchmarks library](https://developer.android.com/topic/performance/benchmarking/benchmarking-overview)
 
-Analyses new benchmarks data and create report on how much your changes affect performance. Throws an exception if new
-benchmark is slower than median of previous ones.
+1. Read new benchmarks data from `projectRootPath`/benchmarks/json (
+   see [Arguments.kt](./app/src/main/kotlin/ru/vorobeij/regress/Arguments.kt))
+2. Send new benchmarks data to backend api, which returns list
+   of [benchmark regressions](./app/src/main/kotlin/ru/vorobeij/regress/benchmark/data/BenchmarkAnalyticsResult.kt)
+3. Throw exception if performance worse more than `threshold`, %
 
 May be deployed on CI for `develop` branch. Each commit into `develop` could be measured from performance point of view.
 
@@ -128,17 +131,6 @@ fi
 
 ## Android Studio flow
 
-**analyse_benchmarks.sh**
-
-```bash
-#!/usr/bin/env bash
-
-STORAGE_FILE=../benchmarks/reports/benchmarks.json
-java -jar regress.jar --projectRootPath $(readlink -f ../) \
-                      --threshold 10 \
-                      --storageFilePath $(readlink -f $STORAGE_FILE)
-```
-
 Run benchmarks with `bundle exec fastlane android benchmarks`:
 
 ```ruby
@@ -165,11 +157,12 @@ Only after 10 entries you can see errors in console.
 
 # Roadmap
 
-1. TODO
-   implement [BenchmarkRepository](https://github.com/vorobeij/regress-analytics/blob/main/app/src/main/kotlin/ru/vorobeij/regress/benchmark/reposotory/BenchmarksRepository.kt)
-   for your benchmark backend
-2. TODO create backend for benchmarks data
-3. Run on each commit. This task fails if performance impacted
+1.
+
+Implement [BenchmarkRepository](https://github.com/vorobeij/regress-analytics/blob/main/app/src/main/kotlin/ru/vorobeij/regress/benchmark/reposotory/BenchmarksRepository.kt)
+for your benchmark backend
+
+2. Create backend for benchmarks data
 
 ## Project structure
 
