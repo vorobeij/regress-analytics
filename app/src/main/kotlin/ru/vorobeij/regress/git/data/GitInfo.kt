@@ -37,7 +37,7 @@ data class GitInfo(
                 commitDate = gitShow.date,
                 message = gitShow.message,
                 branch = branch(File(folder)),
-                isCommitted = false
+                isCommitted = "git status".execute(File(folder))!!.contains("nothing to commit, working tree clean")
             )
         }
 

@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import ru.vorobeij.regress.benchmark.BenchmarkStatisticsProcessor
 import ru.vorobeij.regress.benchmark.data.Benchmark
 import ru.vorobeij.regress.benchmark.data.HistoricalBenchmark
+import ru.vorobeij.regress.benchmark.data.fullName
 import ru.vorobeij.regress.benchmark.reposotory.local.BenchmarksLocalStorage
 import ru.vorobeij.regress.git.data.GitInfo
 
@@ -30,10 +31,9 @@ class BenchmarksFileStorage(
         gitInfo: GitInfo
     ) {
         storageFile.appendText(
-            benchmarks
-                .map { convert(deviceFingerprint, it, gitInfo) }
-                .map { json.encodeToString(it) }
-                .joinToString("\n")
+            benchmarks.joinToString("\n") {
+                json.encodeToString(convert(deviceFingerprint, it, gitInfo))
+            }
         )
         storageFile.appendText("\n")
     }
@@ -41,11 +41,17 @@ class BenchmarksFileStorage(
     override fun getAll(
         deviceFingerprint: String,
         benchmarkName: String
-    ): List<HistoricalBenchmark> = storageFile.readLines()
-        .filter { it.isNotBlank() }
-        .map { json.decodeFromString<HistoricalBenchmark>(it) }
-        .distinctBy { it.commit }
-        .filter { it.deviceFingerprint == deviceFingerprint && it.name == benchmarkName }
+    ): List<HistoricalBenchmark> {
+        return if (storageFile.exists()) {
+            storageFile.readLines()
+                .filter { it.isNotBlank() }
+                .map { json.decodeFromString<HistoricalBenchmark>(it) }
+                .filter { it.deviceFingerprint == deviceFingerprint && it.fullName == benchmarkName }
+                .distinctBy { it.commit }
+        } else {
+            emptyList()
+        }
+    }
 
     private fun convert(
         deviceFingerprint: String,
@@ -55,16 +61,16 @@ class BenchmarksFileStorage(
         val metrics = benchmark.metrics.timeNs ?: benchmark.metrics.summary!!
         val measurement = statisticsProcessor.getMeasurement(metrics.runs)
         return HistoricalBenchmark(
-            gitInfo.commit,
-            benchmark.name,
-            gitInfo.author.email,
-            gitInfo.commitDate.timeInMillis,
-            gitInfo.message,
-            gitInfo.branch,
-            measurement.maximum,
-            measurement.median,
-            measurement.minimum,
-            deviceFingerprint
+            commit = gitInfo.commit,
+            fullName = benchmark.fullName(),
+            authorEmail = gitInfo.author.email,
+            commitDate = gitInfo.commitDate.timeInMillis,
+            message = gitInfo.message,
+            branch = gitInfo.branch,
+            maximum = measurement.maximum,
+            median = measurement.median,
+            minimum = measurement.minimum,
+            deviceFingerprint = deviceFingerprint
         )
     }
 }

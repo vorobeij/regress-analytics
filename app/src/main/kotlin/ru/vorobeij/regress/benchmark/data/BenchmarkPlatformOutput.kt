@@ -46,7 +46,6 @@ data class Benchmark(
     @SerialName("totalRunTimeNs") val totalRunTimeNs: Long,
     @SerialName("warmupIterations") val warmupIterations: Int
 ) {
-
     /**
      * @property summary
      * @property allocationCount macrobenchmark only
@@ -77,7 +76,6 @@ data class BenchmarkContext(
     @SerialName("memTotalBytes") val memTotalBytes: Int,
     @SerialName("sustainedPerformanceModeEnabled") val sustainedPerformanceModeEnabled: Boolean
 ) {
-
     /**
      * @property brand
      * @property device
@@ -103,3 +101,5 @@ data class BenchmarkContext(
         )
     }
 }
+
+fun Benchmark.fullName() = "$className.`$name`()"

@@ -20,6 +20,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import ru.vorobeij.regress.benchmark.BenchmarkStatisticsProcessor
 import ru.vorobeij.regress.benchmark.data.Benchmark
 import ru.vorobeij.regress.benchmark.data.HistoricalBenchmark
+import ru.vorobeij.regress.benchmark.data.fullName
 import ru.vorobeij.regress.benchmark.reposotory.local.BenchmarksLocalStorage
 import ru.vorobeij.regress.git.data.GitInfo
 
@@ -68,7 +69,7 @@ class BenchmarksDatabaseStorage(
     ): List<HistoricalBenchmark> = transaction(database) {
         HistoricalBenchmarkTable
             .select {
-                (HistoricalBenchmarkTable.name eq benchmarkName) and (HistoricalBenchmarkTable.deviceFingerprint eq deviceFingerprint)
+                (HistoricalBenchmarkTable.fullName eq benchmarkName) and (HistoricalBenchmarkTable.deviceFingerprint eq deviceFingerprint)
             }.map { it: ResultRow ->
                 val commitData = it[HistoricalBenchmarkTable.commitDate]
                 val instant: Instant = commitData.atZone(ZoneId.systemDefault()).toInstant()
@@ -79,7 +80,7 @@ class BenchmarksDatabaseStorage(
                 }
                 HistoricalBenchmark(
                     commit = it[HistoricalBenchmarkTable.commit],
-                    name = it[HistoricalBenchmarkTable.name],
+                    fullName = it[HistoricalBenchmarkTable.fullName],
                     authorEmail = it[HistoricalBenchmarkTable.authorEmail],
                     commitDate = calendar.timeInMillis,
                     message = it[HistoricalBenchmarkTable.message],
@@ -101,7 +102,7 @@ class BenchmarksDatabaseStorage(
         val metrics = benchmark.metrics.timeNs ?: benchmark.metrics.summary!!
         val measurement = statisticsProcessor.getMeasurement(metrics.runs)
         it[commit] = gitInfo.commit
-        it[name] = benchmark.name
+        it[fullName] = benchmark.fullName()
         it[authorEmail] = gitInfo.author.email
         it[commitDate] = LocalDateTime.ofInstant(gitInfo.commitDate.toInstant(), TimeZone.getDefault().toZoneId())
         it[message] = gitInfo.message

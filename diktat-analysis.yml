@@ -241,10 +241,10 @@
   enabled: true
 # Checks that line breaks follow code style guide: rule 3.6
 - name: WRONG_NEWLINES
-  enabled: true
+  enabled: false
   configuration:
     # If the number of parameters on one line is more than this threshold, all parameters will be placed on separate lines.
-    maxParametersInOneLine: 2
+    maxParametersInOneLine: 3
     # 3 by default.
     maxCallsInOneLine: 3
 # Checks trailing comma
@@ -516,7 +516,7 @@
   enabled: true
 # If file contains class, then it can't contain extension functions for the same class
 - name: EXTENSION_FUNCTION_WITH_CLASS
-  enabled: true
+  enabled: false
 # Check if kts script contains other functions except run code
 - name: RUN_IN_SCRIPT
   enabled: true

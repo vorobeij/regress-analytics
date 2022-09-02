@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 object HistoricalBenchmarkTable : Table() {
 
     val commit: Column<String> = varchar("commit_hash", 50)
-    val name: Column<String> = varchar("name", 50)
+    val fullName: Column<String> = varchar("fullName", 500)
     val authorEmail: Column<String> = varchar("authorEmail", 50)
     val commitDate: Column<LocalDateTime> = datetime("commitDate")
     val message: Column<String> = text("message")

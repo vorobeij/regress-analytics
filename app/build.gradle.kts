@@ -1,8 +1,8 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
+    `maven-publish`
 }
-
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -40,3 +40,29 @@ dependencyAnalysis {
 }
 
 apply(from = "$rootDir/jacoco.gradle")
+
+// todo to separate script
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "ru.vorobeij.regress.RegressAnalytics"
+    }
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "ru.vorobeij.benchmark"
+            artifactId = "regress"
+            version = "1.0"
+            from(components["java"])
+        }
+    }
+}

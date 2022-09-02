@@ -25,13 +25,13 @@ class RegressAnalyticsEngine(
 
         val errors = results.joinToString("\n") {
             if (it.regressPercentage > arguments.threshold) {
-                "Benchmark ${it.benchmarkName} has ${it.regressPercentage} poorer performance!"
+                "Benchmark ${it.benchmarkName} is ${it.regressPercentage}% slower!"
             } else {
                 ""
             }
         }
 
-        if (errors.isNotEmpty()) {
+        if (errors.isNotBlank()) {
             throw BenchmarkPerformanceException(errors)
         }
     }

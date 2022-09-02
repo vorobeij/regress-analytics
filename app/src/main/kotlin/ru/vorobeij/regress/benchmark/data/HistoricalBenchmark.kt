@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 /**
  * @property commit
- * @property name
  * @property authorEmail
  * @property commitDate
  * @property message
@@ -14,11 +13,12 @@ import kotlinx.serialization.Serializable
  * @property median
  * @property minimum
  * @property deviceFingerprint
+ * @property fullName
  */
 @Serializable
 data class HistoricalBenchmark(
     @SerialName("commit") val commit: String,
-    @SerialName("name") val name: String,
+    @SerialName("fullName") val fullName: String,
     @SerialName("authorEmail") val authorEmail: String,
     @SerialName("commitDate") val commitDate: Long,
     @SerialName("message") val message: String,

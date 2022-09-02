@@ -11,7 +11,6 @@ import ru.vorobeij.regress.git.data.GitInfo
  * - local database
  */
 interface BenchmarksRepository {
-
     /**
      * Save new entry to a storage and tell, what regression do we have
      *

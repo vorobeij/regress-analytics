@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.koin.test.inject
 import ru.vorobeij.regress.benchmark.ClosingKoinTest
 import ru.vorobeij.regress.benchmark.data.expectedMacrobenchmarkPlatformOutput
+import ru.vorobeij.regress.benchmark.data.fullName
 import ru.vorobeij.regress.benchmark.data.microbenchmarkData
 import ru.vorobeij.regress.benchmark.reposotory.local.BenchmarksLocalStorage
 import ru.vorobeij.regress.di.dataModule
@@ -30,7 +31,14 @@ internal class BenchmarksFileStorageTest : ClosingKoinTest(
             expectedMacrobenchmarkPlatformOutput.benchmarkContext.build.fingerprint,
             gitInfo
         )
-        assert(benchmarksDatabaseStorage.getAll(expectedMacrobenchmarkPlatformOutput.benchmarkContext.build.fingerprint, "startup").isNotEmpty())
+        expectedMacrobenchmarkPlatformOutput.benchmarks.forEach {
+            assert(
+                benchmarksDatabaseStorage.getAll(
+                    expectedMacrobenchmarkPlatformOutput.benchmarkContext.build.fingerprint,
+                    it.fullName()
+                ).isNotEmpty()
+            )
+        }
     }
 
     @Test
@@ -52,9 +60,11 @@ internal class BenchmarksFileStorageTest : ClosingKoinTest(
             microbenchmarkData.benchmarkContext.build.fingerprint + "sd",
             gitInfo.copy(commit = UUID.randomUUID().toString())
         )
-        Assertions.assertEquals(
-            /* expected = */ 2,
-            /* actual = */ benchmarksDatabaseStorage.getAll(expectedMacrobenchmarkPlatformOutput.benchmarkContext.build.fingerprint, "startup").size
-        )
+        expectedMacrobenchmarkPlatformOutput.benchmarks.forEach {
+            Assertions.assertEquals(
+                /* expected = */ 2,
+                /* actual = */ benchmarksDatabaseStorage.getAll(expectedMacrobenchmarkPlatformOutput.benchmarkContext.build.fingerprint, it.fullName()).size
+            )
+        }
     }
 }

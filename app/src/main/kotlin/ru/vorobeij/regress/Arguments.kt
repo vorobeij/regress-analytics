@@ -21,6 +21,9 @@ data class Arguments(
 
     init {
         File(benchmarkReportsRoot).mkdirs()
+        storageFilePath?.let {
+            File(storageFilePath).parentFile.mkdirs()
+        }
     }
 
     companion object {

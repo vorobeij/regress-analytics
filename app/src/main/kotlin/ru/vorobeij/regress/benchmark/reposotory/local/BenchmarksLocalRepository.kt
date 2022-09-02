@@ -6,6 +6,7 @@ import ru.vorobeij.regress.benchmark.data.BenchmarkAnalyticsResult
 import ru.vorobeij.regress.benchmark.data.BenchmarkPlatformOutput
 import ru.vorobeij.regress.benchmark.data.HistoricalBenchmark
 import ru.vorobeij.regress.benchmark.data.Measurement
+import ru.vorobeij.regress.benchmark.data.fullName
 import ru.vorobeij.regress.benchmark.reposotory.BenchmarksRepository
 import ru.vorobeij.regress.git.data.GitInfo
 
@@ -35,7 +36,7 @@ class BenchmarksLocalRepository(
         it: Benchmark
     ): BenchmarkAnalyticsResult {
         val measurements = benchmarksDatabaseStorage
-            .getAll(benchmarkPlatformOutput.benchmarkContext.build.fingerprint, it.name)
+            .getAll(benchmarkPlatformOutput.benchmarkContext.build.fingerprint, it.fullName())
             .sortedByDescending(HistoricalBenchmark::commitDate)
             .map { historicalBenchmark ->
                 Measurement(
@@ -55,6 +56,6 @@ class BenchmarksLocalRepository(
             )
         )
 
-        return BenchmarkAnalyticsResult(regress, it.name)
+        return BenchmarkAnalyticsResult(regress, it.fullName())
     }
 }

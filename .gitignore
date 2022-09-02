@@ -23,3 +23,5 @@ logs
 .idea/jarRepositories.xml
 .idea/$CACHE_FILE$
 /.idea/
+/app/android-benchmarks/test/
+/app/*.db

@@ -7,18 +7,18 @@ import ru.vorobeij.regress.di.dataModule
 import ru.vorobeij.regress.di.databaseStorageModule
 import ru.vorobeij.regress.di.fileStorageModule
 
+@Suppress("COMMENTED_OUT_CODE")
 object RegressAnalytics {
 
     @JvmStatic
     @ExcludeGenerated
     fun main(args: Array<String>) {
-        @Suppress("COMMENTED_OUT_CODE")
-        // val arguments = Arguments.fromArgs(args)
-        val arguments = Arguments(
-            projectRootPath = "/Users/sj/AndroidApps/AndroidAppTemplate",
-            threshold = 5,
-            storageFilePath = "/Users/sj/Documents/android-benchmarks/test.json"
-        )
+        val arguments = Arguments.fromArgs(args)
+        // val arguments = Arguments(
+        // projectRootPath = "/Users/sj/AndroidApps/AndroidAppTemplate",
+        // threshold = 5,
+        // storageFilePath = "/Users/sj/AndroidApps/AndroidAppTemplate/benchmarks/reports/benchmarks-2.json"
+        // )
 
         val koinApp: KoinApplication = koinApplication {
             modules(
