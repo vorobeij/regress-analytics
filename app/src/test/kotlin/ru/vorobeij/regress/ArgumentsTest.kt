@@ -2,6 +2,7 @@ package ru.vorobeij.regress
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import ru.vorobeij.core.Arguments
 
 internal class ArgumentsTest {
 

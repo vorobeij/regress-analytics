@@ -5,7 +5,11 @@ package ru.vorobeij.regress.benchmark.data
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import ru.vorobeij.regress.benchmark.BenchmarksParser
+import ru.vorobeij.core.BenchmarksParser
+import ru.vorobeij.core.data.Benchmark
+import ru.vorobeij.core.data.BenchmarkContext
+import ru.vorobeij.core.data.BenchmarkPlatformOutput
+import ru.vorobeij.core.data.Measurements
 
 val macrobenchmarkJson = """
     {

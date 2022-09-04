@@ -6,14 +6,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.koin.test.get
-import ru.vorobeij.regress.benchmark.BenchmarkFilesProvider
-import ru.vorobeij.regress.benchmark.BenchmarkPerformanceException
+import ru.vorobeij.core.Arguments
+import ru.vorobeij.core.BenchmarkFilesProvider
+import ru.vorobeij.core.BenchmarkPerformanceException
+import ru.vorobeij.core.BenchmarksRepository
+import ru.vorobeij.core.RegressAnalyticsEngine
+import ru.vorobeij.core.data.BenchmarkAnalyticsResult
 import ru.vorobeij.regress.benchmark.ClosingKoinTest
-import ru.vorobeij.regress.benchmark.data.BenchmarkAnalyticsResult
 import ru.vorobeij.regress.benchmark.data.macrobenchmarkJson
-import ru.vorobeij.regress.benchmark.reposotory.BenchmarksRepository
-import ru.vorobeij.regress.di.dataModule
-import ru.vorobeij.regress.di.fileStorageModule
+import ru.vorobeij.regress.implementation.di.dataModule
+import ru.vorobeij.regress.implementation.di.fileStorageModule
 
 class RegressAnalyticsEngineTest : ClosingKoinTest(
     listOf(

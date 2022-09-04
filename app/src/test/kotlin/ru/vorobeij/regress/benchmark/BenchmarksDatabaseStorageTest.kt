@@ -4,14 +4,14 @@ import java.util.UUID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
+import ru.vorobeij.core.data.fullName
+import ru.vorobeij.core.git.data.GitInfo
 import ru.vorobeij.regress.benchmark.data.expectedMacrobenchmarkPlatformOutput
-import ru.vorobeij.regress.benchmark.data.fullName
 import ru.vorobeij.regress.benchmark.data.microbenchmarkData
-import ru.vorobeij.regress.benchmark.reposotory.local.database.BenchmarksDatabaseStorage
-import ru.vorobeij.regress.di.dataModule
-import ru.vorobeij.regress.di.databaseStorageModule
 import ru.vorobeij.regress.di.testDatabaseModule
-import ru.vorobeij.regress.git.data.GitInfo
+import ru.vorobeij.regress.implementation.di.dataModule
+import ru.vorobeij.regress.implementation.di.databaseStorageModule
+import ru.vorobeij.regress.implementation.local.database.BenchmarksDatabaseStorage
 
 class BenchmarksDatabaseStorageTest : ClosingKoinTest(
     listOf(

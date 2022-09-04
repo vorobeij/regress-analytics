@@ -12,7 +12,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:_")
     implementation("org.nield:kotlin-statistics:_")
     implementation(Koin.core)
-    implementation(KotlinX.cli)
     implementation(KotlinX.serialization.json)
     runtimeOnly("com.h2database:h2:_")
     runtimeOnly("org.jetbrains.exposed:exposed-dao:_")

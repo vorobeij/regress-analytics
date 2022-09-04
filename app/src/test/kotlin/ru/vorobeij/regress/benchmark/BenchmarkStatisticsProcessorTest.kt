@@ -7,7 +7,8 @@
 package ru.vorobeij.regress.benchmark
 
 import org.junit.jupiter.api.Test
-import ru.vorobeij.regress.benchmark.data.Measurement
+import ru.vorobeij.core.data.Measurement
+import ru.vorobeij.regress.implementation.BenchmarkStatisticsProcessor
 
 internal class BenchmarkStatisticsProcessorTest {
 

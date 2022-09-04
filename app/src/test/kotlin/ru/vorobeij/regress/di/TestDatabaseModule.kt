@@ -1,7 +1,7 @@
 package ru.vorobeij.regress.di
 
 import org.koin.dsl.module
-import ru.vorobeij.regress.benchmark.reposotory.local.database.DatabaseProvider
+import ru.vorobeij.regress.implementation.local.database.DatabaseProvider
 
 val testDatabaseModule = module {
     single {
