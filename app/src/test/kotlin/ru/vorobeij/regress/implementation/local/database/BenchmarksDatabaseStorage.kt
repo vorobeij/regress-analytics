@@ -1,4 +1,4 @@
-package ru.vorobeij.regress.benchmark
+package ru.vorobeij.regress.implementation.local.database
 
 import java.util.UUID
 import org.junit.jupiter.api.Assertions
@@ -11,7 +11,6 @@ import ru.vorobeij.regress.benchmark.data.microbenchmarkData
 import ru.vorobeij.regress.di.testDatabaseModule
 import ru.vorobeij.regress.implementation.di.dataModule
 import ru.vorobeij.regress.implementation.di.databaseStorageModule
-import ru.vorobeij.regress.implementation.local.database.BenchmarksDatabaseStorage
 
 class BenchmarksDatabaseStorageTest : ClosingKoinTest(
     listOf(

@@ -1,4 +1,4 @@
-package ru.vorobeij.regress.benchmark.reposotory.local.file
+package ru.vorobeij.regress.implementation.local.file
 
 import java.util.UUID
 import org.junit.jupiter.api.Assertions

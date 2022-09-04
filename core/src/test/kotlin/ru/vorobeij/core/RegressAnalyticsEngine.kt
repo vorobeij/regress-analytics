@@ -1,34 +1,19 @@
-package ru.vorobeij.regress
+package ru.vorobeij.core
 
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.koin.test.get
-import ru.vorobeij.core.Arguments
-import ru.vorobeij.core.BenchmarkFilesProvider
-import ru.vorobeij.core.BenchmarkPerformanceException
-import ru.vorobeij.core.BenchmarksRepository
-import ru.vorobeij.core.RegressAnalyticsEngine
 import ru.vorobeij.core.data.BenchmarkAnalyticsResult
-import ru.vorobeij.regress.benchmark.ClosingKoinTest
-import ru.vorobeij.regress.benchmark.data.macrobenchmarkJson
-import ru.vorobeij.regress.implementation.di.dataModule
-import ru.vorobeij.regress.implementation.di.fileStorageModule
 
-class RegressAnalyticsEngineTest : ClosingKoinTest(
-    listOf(
-        dataModule,
-        fileStorageModule("./android-benchmarks/test/test.json")
-    )
-) {
+class RegressAnalyticsEngineTest {
 
     private val benchmarksRepository: BenchmarksRepository = mockk()
     private val benchmarkFilesProvider: BenchmarkFilesProvider = mockk()
     private val regressAnalyticsEngine: RegressAnalyticsEngine by lazy {
         RegressAnalyticsEngine(
-            benchmarkParser = get(),
+            benchmarkParser = mockk(),
             benchmarksRepository = benchmarksRepository,
             benchmarkFilesProvider = benchmarkFilesProvider
         )

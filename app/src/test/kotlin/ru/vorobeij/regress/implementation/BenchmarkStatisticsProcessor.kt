@@ -4,11 +4,10 @@
     "LONG_NUMERICAL_VALUES_SEPARATED"
 )
 
-package ru.vorobeij.regress.benchmark
+package ru.vorobeij.regress.implementation
 
 import org.junit.jupiter.api.Test
 import ru.vorobeij.core.data.Measurement
-import ru.vorobeij.regress.implementation.BenchmarkStatisticsProcessor
 
 internal class BenchmarkStatisticsProcessorTest {
 

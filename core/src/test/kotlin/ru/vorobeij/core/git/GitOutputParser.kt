@@ -1,8 +1,7 @@
-package ru.vorobeij.regress
+package ru.vorobeij.core.git
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import ru.vorobeij.core.git.GitOutputParser
 import ru.vorobeij.core.git.data.GitShowInfo
 
 internal class GitOutputParserTest {
