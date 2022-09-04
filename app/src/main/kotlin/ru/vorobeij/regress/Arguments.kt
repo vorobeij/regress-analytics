@@ -26,6 +26,15 @@ data class Arguments(
         }
     }
 
+    override fun toString(): String {
+        return """
+            projectRootPath      = $projectRootPath       
+            threshold            = $threshold 
+            storageFilePath      = $storageFilePath       
+            benchmarkJsonRoot    = $benchmarkJsonRoot         
+            benchmarkReportsRoot = $benchmarkReportsRoot            
+        """.trimIndent()
+    }
     companion object {
 
         fun fromArgs(args: Array<String>): Arguments {
