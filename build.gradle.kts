@@ -49,12 +49,15 @@ allprojects {
     }
 }
 
+apply(from = "./ci/testrules/kotlin-tests-rule.gradle")
+
 tasks.register<GradleBuild>("checkAndPublish") {
     tasks = listOf(
         "clean",
         "refreshVersionsMigrate",
         "refreshVersions",
         "buildHealth",
+        "kotlinTestRule",
         "diktatFix",
         // "jacocoTestCoverageVerification",
         "build",
